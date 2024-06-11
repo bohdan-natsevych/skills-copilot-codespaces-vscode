@@ -34,4 +34,43 @@ app.get('/comments/:id', (req, res) => {
     res.send(comment);
 });
 
+// Add new comment
+app.post('/comments', (req, res) => {
+    const data = readData();
+    const newComment = {
+        id: data.length + 1,
+        name: req.body.name,
+        comment: req.body.comment
+    }
+    data.push(newComment);
+    writeData(data);
+    res.send(data);
+});
+
+// Update comment
+app.put('/comments/:id', (req, res) => {
+    const data = readData();
+    const comment = data.find(item => item.id === parseInt(req.params.id));
+    comment.name = req.body.name;
+    comment.comment = req.body.comment;
+    writeData(data);
+    res.send(data);
+});
+
+// Delete comment
+app.delete('/comments/:id', (req, res) => {
+    const data = readData();
+    const newData = data.filter(item => item.id !== parseInt(req.params.id));
+    writeData(newData);
+    res.send(newData);
+});
+
+// Listen to port
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+});
+// Export module
+module.exports = app;
+
+
 
